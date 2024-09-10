@@ -106,6 +106,7 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           );
         }
+
         //return listview
         if (snapshot.connectionState == ConnectionState.active) {
           return ListView.builder(
@@ -113,6 +114,7 @@ class _ChatScreenState extends State<ChatScreen> {
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (BuildContext context, int index) {
               var data = snapshot.data!.docs;
+              final userId = data[index].data() as Map<String, dynamic>;
               // build message item
               // is current user
               bool isCurrentUser = data[index]['senderId'] == senderId;
@@ -127,7 +129,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     children: [
                       ChatBubble(
                           message: data[index]['message'],
-                          isCurrentUser: isCurrentUser),
+                          isCurrentUser: isCurrentUser,
+                          messageId: data[index].id,
+                          userId: userId['senderId']),
                     ],
                   ));
             },

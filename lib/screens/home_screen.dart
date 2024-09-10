@@ -24,7 +24,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         foregroundColor: Colors.grey,
         backgroundColor: Colors.transparent,
-        title: const Text("Home screen"),
+        title: const Text("USERS"),
         centerTitle: true,
         actions: [
           IconButton(
@@ -42,7 +42,7 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildUserList() {
     return StreamBuilder(
-      stream: _chatService.getUserStream(),
+      stream: _chatService.getUsersStreamExcludingBlocked(),
       // initialData: initialData,
       builder: (BuildContext context, snapshot) {
         //error
@@ -61,6 +61,7 @@ class HomeScreen extends StatelessWidget {
             ),
           );
         }
+        final blockedUsers = snapshot.data ?? [];
         //return listview
         if (snapshot.connectionState == ConnectionState.active) {
           return ListView.builder(
@@ -84,8 +85,10 @@ class HomeScreen extends StatelessWidget {
             },
           );
         }
-        if (snapshot.connectionState == ConnectionState.none) {
-          const Text("Error in connection");
+        if (blockedUsers.isEmpty) {
+          return const Center(
+            child: Text("data"),
+          );
         }
 
         return const Center(child: Text("Something went wrong"));
